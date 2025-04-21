@@ -1,9 +1,7 @@
 package org.ToothBrush.enchant
 
 import io.github.monun.invfx.InvFX
-import io.github.monun.invfx.InvWindow
 import io.github.monun.invfx.openFrame
-import io.github.monun.tap.data.persistentData
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
@@ -12,16 +10,16 @@ import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.HumanEntity
-import org.bukkit.entity.Item
-import org.bukkit.entity.Mob
 import org.bukkit.entity.Monster
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDeathEvent
-import org.bukkit.event.inventory.*
-import org.bukkit.event.world.LootGenerateEvent
+import org.bukkit.event.inventory.ClickType
+import org.bukkit.event.inventory.InventoryOpenEvent
+import org.bukkit.event.inventory.InventoryType
+import org.bukkit.event.inventory.PrepareItemCraftEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
@@ -29,7 +27,6 @@ import org.bukkit.inventory.ShapelessRecipe
 import org.bukkit.inventory.recipe.CraftingBookCategory
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.scheduler.BukkitRunnable
 import kotlin.random.Random
 
 class Enchant : JavaPlugin(), Listener {
@@ -140,7 +137,7 @@ class Enchant : JavaPlugin(), Listener {
         }
 
         set(v) {
-            itemMeta = itemMeta?.apply { 
+            itemMeta = itemMeta?.apply {
                 persistentDataContainer.set(plusLevelKey, PersistentDataType.INTEGER, v)
             }
         }

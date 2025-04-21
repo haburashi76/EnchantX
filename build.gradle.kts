@@ -21,9 +21,7 @@ tasks.jar {
 }
 
 dependencies {
-    implementation("io.github.monun:tap-api:4.9.8")
     implementation("io.github.monun:invfx-api:3.3.2")
-    implementation("io.github.monun:kommand-api:3.1.7")
     compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 }
