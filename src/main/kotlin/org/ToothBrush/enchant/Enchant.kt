@@ -31,10 +31,13 @@ import org.bukkit.plugin.java.JavaPlugin
 import kotlin.random.Random
 
 class Enchant : JavaPlugin(), Listener {
-    private val weaponDamageMap = listOf(1.0, 1.02, 1.04, 1.08, 1.15, 1.3, 1.45, 1.5, 1.6, 1.75, 1.95)
-    private val otherDamageMap = listOf(1.0, 1.01, 1.02, 1.04, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4)
-
-    private val armorBlockMap = listOf(1.0, 0.99, 0.98, 0.97, 0.96, 0.95, 0.94, 0.92, 0.9, 0.86, 0.84)
+    private val weaponDamageMap = listOf(0.0, 0.02, 0.04, 0.08, 0.15, 0.3, 0.45, 0.5, 0.6, 0.75, 0.95)
+    private val otherDamageMap = listOf(0.0, 0.01, 0.02, 0.04, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4)
+    private val netheriteDamageCoefficient = 1.4
+    private val netheriteBlockingCoefficient = 1.2
+    private val armorBlockMap = listOf(1.0, 0.99, 0.98, 0.97, 0.96, 0.95, 0.94, 0.92, 0.9, 0.86, 0.84).map {
+        1.0 - it
+    }
 
     private val probMap = listOf(100.0, 100.0, 80.0, 70.0, 60.0, 30.0, 15.0, 5.0, 2.0, 0.5)
     private val starMap = listOf(
@@ -197,10 +200,13 @@ class Enchant : JavaPlugin(), Listener {
                                                 Component.text(starMap[this.plusLevel]),
                                                 Component.text(
                                                     if (event.currentItem?.type?.isWeapon() == true)
-                                                    "(주로 사용하는 손에서)최종 피해량 ${weaponDamageMap[this.plusLevel]}배"
+                                                    "(주로 사용하는 손에서)최종 피해량 ${1.0 + (weaponDamageMap[this.plusLevel] * 
+                                                            if (this.type.isNetherite()) netheriteDamageCoefficient else 1.0)}배"
                                                     else if (event.currentItem?.type?.isArmor() == true)
-                                                        "받는 피해 ${armorBlockMap[this.plusLevel]}배"
-                                                    else "(주로 사용하는 손에서)최종 피해량 ${otherDamageMap[this.plusLevel]}배"
+                                                        "받는 피해 ${1.0 - (armorBlockMap[this.plusLevel] *
+                                                                if (this.type.isNetherite()) netheriteBlockingCoefficient else 1.0)}배"
+                                                    else "(주로 사용하는 손에서)최종 피해량 ${1.0 + (otherDamageMap[this.plusLevel] *
+                                                            if (this.type.isNetherite()) netheriteDamageCoefficient else 1.0)}배"
                                                 )))
                                         })
                                 } else {
@@ -392,6 +398,9 @@ class Enchant : JavaPlugin(), Listener {
         }
         return armorMap.contains(this)
     }
+    private fun Material.isNetherite(): Boolean {
+        return this.name.contains("NETHERITE") && ItemStack(this).canEnchanting()
+    }
     @EventHandler
     fun onKill(event: EntityDeathEvent) {
         if (event.entity is Monster) {
@@ -408,9 +417,13 @@ class Enchant : JavaPlugin(), Listener {
         if (damager is Player) {
             if (damager.inventory.itemInMainHand.plusLevel > 0) {
                 if (damager.inventory.itemInMainHand.type.isWeapon()) {
-                    event.damage *= weaponDamageMap[damager.inventory.itemInMainHand.plusLevel]
+                    event.damage *= (1.0 + (weaponDamageMap[damager.inventory.itemInMainHand.plusLevel] *
+                            if (damager.inventory.itemInMainHand.type.isNetherite())
+                                netheriteDamageCoefficient else 1.0))
                 } else {
-                    event.damage *= otherDamageMap[damager.inventory.itemInMainHand.plusLevel]
+                    event.damage *= (1.0 + (otherDamageMap[damager.inventory.itemInMainHand.plusLevel] *
+                            if (damager.inventory.itemInMainHand.type.isNetherite())
+                                netheriteDamageCoefficient else 1.0))
                 }
             }
         }
@@ -418,7 +431,8 @@ class Enchant : JavaPlugin(), Listener {
             entity.inventory.armorContents.forEach {
                 if (it != null) {
                     if (it.plusLevel > 0 && it.type.isArmor()) {
-                        event.damage *= armorBlockMap[it.plusLevel]
+                        event.damage *= 1.0 - (armorBlockMap[it.plusLevel] *
+                                if (it.type.isNetherite()) netheriteBlockingCoefficient else 1.0)
                     }
                 }
             }
