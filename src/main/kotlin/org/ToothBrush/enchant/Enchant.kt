@@ -12,7 +12,6 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.Monster
 import org.bukkit.entity.Player
-import org.bukkit.entity.Snowman
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -31,10 +30,17 @@ import org.bukkit.plugin.java.JavaPlugin
 import kotlin.random.Random
 
 class Enchant : JavaPlugin(), Listener {
-    private val weaponDamageMap = listOf(0.0, 0.02, 0.04, 0.08, 0.15, 0.3, 0.45, 0.5, 0.6, 0.75, 0.95)
-    private val otherDamageMap = listOf(0.0, 0.01, 0.02, 0.04, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4)
-    private val netheriteDamageCoefficient = 1.4
-    private val netheriteBlockingCoefficient = 1.2
+    private val weaponDamageMap =
+        listOf(0.0, 0.02, 0.04, 0.08, 0.15, 0.3, 0.45, 0.5, 0.6, 0.75, 0.95)
+    private val otherDamageMap =
+        listOf(0.0, 0.01, 0.02, 0.04, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4)
+    private val netheriteOtherDamageMap =
+        listOf(0.0, 0.01, 0.03, 0.05, 0.12, 0.2, 0.28, 0.35, 0.42, 0.5, 0.6)
+    private val netheriteWeaponDamageMap =
+        listOf(0.0, 0.04, 0.1, 0.12, 0.18, 0.35, 0.5, 0.6, 0.85, 1.0, 1.2)
+    private val netheriteArmorBlockMap = listOf(1.0, 0.98, 0.97, 0.95, 0.93, 0.91, 0.89, 0.86, 0.83, 0.8, 0.77).map {
+        1.0 - it
+    }
     private val armorBlockMap = listOf(1.0, 0.99, 0.98, 0.97, 0.96, 0.95, 0.94, 0.92, 0.9, 0.86, 0.84).map {
         1.0 - it
     }
@@ -200,13 +206,13 @@ class Enchant : JavaPlugin(), Listener {
                                                 Component.text(starMap[this.plusLevel]),
                                                 Component.text(
                                                     if (event.currentItem?.type?.isWeapon() == true)
-                                                    "(주로 사용하는 손에서)최종 피해량 ${1.0 + (weaponDamageMap[this.plusLevel] * 
-                                                            if (this.type.isNetherite()) netheriteDamageCoefficient else 1.0)}배"
+                                                    "(주로 사용하는 손에서)최종 피해량 ${1.0 +
+                                                            if (this.type.isNetherite()) netheriteWeaponDamageMap[this.plusLevel] else weaponDamageMap[this.plusLevel]}배"
                                                     else if (event.currentItem?.type?.isArmor() == true)
-                                                        "받는 피해 ${1.0 - (armorBlockMap[this.plusLevel] *
-                                                                if (this.type.isNetherite()) netheriteBlockingCoefficient else 1.0)}배"
-                                                    else "(주로 사용하는 손에서)최종 피해량 ${1.0 + (otherDamageMap[this.plusLevel] *
-                                                            if (this.type.isNetherite()) netheriteDamageCoefficient else 1.0)}배"
+                                                        "받는 피해 ${1.0 - 
+                                                                if (this.type.isNetherite()) netheriteArmorBlockMap[this.plusLevel] else armorBlockMap[this.plusLevel]}배"
+                                                    else "(주로 사용하는 손에서)최종 피해량 ${1.0 + 
+                                                            if (this.type.isNetherite()) netheriteOtherDamageMap[this.plusLevel] else otherDamageMap[this.plusLevel]}배"
                                                 )))
                                         })
                                 } else {
@@ -394,7 +400,7 @@ class Enchant : JavaPlugin(), Listener {
     }
     private fun Material.isArmor(): Boolean {
         val armorMap = Material.entries.filter {
-            it.name.contains("CHESTPLATE") || it.name.contains("LEGGINGS") || it.name.contains("HELMET") || it.name.contains("BOOTS")
+            it.name.contains("CHESTPLATE") || it.name.contains("LEGGINGS") || it.name.contains("HELMET") || it.name.contains("BOOTS") || it == Material.ELYTRA
         }
         return armorMap.contains(this)
     }
@@ -417,13 +423,13 @@ class Enchant : JavaPlugin(), Listener {
         if (damager is Player) {
             if (damager.inventory.itemInMainHand.plusLevel > 0) {
                 if (damager.inventory.itemInMainHand.type.isWeapon()) {
-                    event.damage *= (1.0 + (weaponDamageMap[damager.inventory.itemInMainHand.plusLevel] *
+                    event.damage *= (1.0 +
                             if (damager.inventory.itemInMainHand.type.isNetherite())
-                                netheriteDamageCoefficient else 1.0))
+                                netheriteWeaponDamageMap[damager.inventory.itemInMainHand.plusLevel] else weaponDamageMap[damager.inventory.itemInMainHand.plusLevel])
                 } else {
-                    event.damage *= (1.0 + (otherDamageMap[damager.inventory.itemInMainHand.plusLevel] *
+                    event.damage *= (1.0 +
                             if (damager.inventory.itemInMainHand.type.isNetherite())
-                                netheriteDamageCoefficient else 1.0))
+                                netheriteOtherDamageMap[damager.inventory.itemInMainHand.plusLevel] else otherDamageMap[damager.inventory.itemInMainHand.plusLevel])
                 }
             }
         }
@@ -431,8 +437,8 @@ class Enchant : JavaPlugin(), Listener {
             entity.inventory.armorContents.forEach {
                 if (it != null) {
                     if (it.plusLevel > 0 && it.type.isArmor()) {
-                        event.damage *= 1.0 - (armorBlockMap[it.plusLevel] *
-                                if (it.type.isNetherite()) netheriteBlockingCoefficient else 1.0)
+                        event.damage *= 1.0 -
+                                if (it.type.isNetherite()) netheriteArmorBlockMap[it.plusLevel] else armorBlockMap[it.plusLevel]
                     }
                 }
             }
