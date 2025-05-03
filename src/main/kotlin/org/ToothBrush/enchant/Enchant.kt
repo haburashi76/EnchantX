@@ -16,10 +16,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDeathEvent
-import org.bukkit.event.inventory.ClickType
-import org.bukkit.event.inventory.InventoryOpenEvent
-import org.bukkit.event.inventory.InventoryType
-import org.bukkit.event.inventory.PrepareItemCraftEvent
+import org.bukkit.event.inventory.*
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
@@ -114,8 +111,34 @@ class Enchant : JavaPlugin(), Listener {
     override fun onDisable() {
         // Plugin shutdown logic
     }
+    @EventHandler
+    fun onNetherite(event: PrepareSmithingEvent) {
+        if (event.result == null) return
+        val inventory = event.inventory
 
+        val base = inventory.getItem(0)
+        val addition = inventory.getItem(1)
 
+        if (base != null && addition != null &&
+            base.type.name.contains("DIAMOND") &&
+            addition.type == Material.NETHERITE_INGOT
+        ) {
+            event.result = event.result?.apply {
+                lore(listOf(Component.text(""),
+                    Component.text(starMap[this.plusLevel]),
+                    Component.text(
+                        if (event.result?.type?.isWeapon() == true)
+                            "(주로 사용하는 손에서)최종 피해량 ${1.0 +
+                                    if (this.type.isNetherite()) netheriteWeaponDamageMap[this.plusLevel] else weaponDamageMap[this.plusLevel]}배"
+                        else if (event.result?.type?.isArmor() == true)
+                            "받는 피해 ${1.0 -
+                                    if (this.type.isNetherite()) netheriteArmorBlockMap[this.plusLevel] else armorBlockMap[this.plusLevel]}배"
+                        else "(주로 사용하는 손에서)최종 피해량 ${1.0 +
+                                if (this.type.isNetherite()) netheriteOtherDamageMap[this.plusLevel] else otherDamageMap[this.plusLevel]}배"
+                    )))
+            }
+        }
+    }
 
     @EventHandler
     fun onInventoryOpen(event: InventoryOpenEvent) {
