@@ -27,7 +27,7 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 import kotlin.random.Random
 
-open class AnvilListener(
+class AnvilListener(
     private val plugin: JavaPlugin,
 ) : Listener, Setup {
 
