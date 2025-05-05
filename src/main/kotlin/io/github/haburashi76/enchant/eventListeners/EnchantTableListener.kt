@@ -35,13 +35,9 @@ class EnchantTableListener(
     }
 
     override fun setup() {
-        Bukkit.addRecipe(recipe)
-        plugin.server.pluginManager.registerEvents(this, plugin)
-        magic_stone_item.addUnsafeEnchantment(Enchantment.LUCK, 1)
-        val meta = magic_stone_item.itemMeta
 
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
-        magic_stone_item.itemMeta = meta
+        plugin.server.pluginManager.registerEvents(this, plugin)
+        Bukkit.addRecipe(recipe)
     }
 
     @EventHandler
@@ -110,10 +106,8 @@ class EnchantTableListener(
                         //event.currentItem = ItemStack(Material.AIR)
                         shardSlot.onClick { e ->
                             if (e.click == ClickType.LEFT) {
-                                //shardSlot.item = null
-                                //selectShardSlot = -10000
-                                e.whoClicked.closeInventory()
-                                enchantingInventoryOpen(e.whoClicked)
+                                shardSlot.item = null
+                                selectShardSlot = -10000
                             }
                         }
                     }

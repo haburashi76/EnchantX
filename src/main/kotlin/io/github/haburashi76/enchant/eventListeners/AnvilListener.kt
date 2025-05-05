@@ -42,10 +42,6 @@ class AnvilListener(
 
     override fun setup() {
         Bukkit.addRecipe(recipe)
-        heart_item.addUnsafeEnchantment(Enchantment.LUCK, 1)
-        val meta = heart_item.itemMeta
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
-        heart_item.itemMeta = meta
         plugin.server.pluginManager.registerEvents(this, plugin)
     }
 
@@ -173,9 +169,7 @@ class AnvilListener(
 
             onClickBottom { event ->
                 if (event.click == ClickType.LEFT) {
-
                     if (event.currentItem?.canEnchanting() == true) {
-
                         itemSlot.item = event.currentItem?.clone()?.apply {
                             itemMeta = itemMeta.apply {
                                 if (!persistentDataContainer.has(plusLevelKey)) {
@@ -190,14 +184,13 @@ class AnvilListener(
                             )
                         }
                         currentItemSlot = event.slot
-
-                    } else if (event.currentItem?.itemMeta == heart_item.itemMeta) {
+                    }
+                    if (event.currentItem?.itemMeta == heart_item.itemMeta) {
                         shardSlot.item = event.currentItem?.clone()
                         currentShardSlot = event.slot
                     }
                 }
             }
-
         }
         (player as Player).openFrame(frame)
 

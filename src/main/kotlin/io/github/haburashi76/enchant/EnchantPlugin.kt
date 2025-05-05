@@ -5,11 +5,12 @@ import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
 
 class EnchantPlugin : JavaPlugin(), Listener {
-    private val listeners: List<Setup> = listOf(AnvilListener(this),
-        CombatListener(this), CraftingListener(this),
-        EnchantTableListener(this),
-        SmithingListener(this))
+
     override fun onEnable() {
+        val listeners: List<Setup> = listOf(AnvilListener(this),
+            CombatListener(this), CraftingListener(this),
+            EnchantTableListener(this),
+            SmithingListener(this))
         listeners.forEach {
             it.setup()
         }
