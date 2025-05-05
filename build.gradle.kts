@@ -4,8 +4,8 @@ plugins {
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
-group = "org.ToothBrush"
-version = "1.0"
+group = "io.github.haburashi76"
+version = "1.0.5"
 
 repositories {
     mavenCentral()
@@ -21,6 +21,7 @@ tasks.jar {
 }
 
 dependencies {
+    implementation("com.google.guava:guava:32.1.2-jre")
     implementation("io.github.monun:invfx-api:3.3.2")
     compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
