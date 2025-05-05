@@ -1,6 +1,6 @@
 name: Enchant
 version: '1.0'
-main: org.ToothBrush.enchant.Enchant
+main: io.github.haburashi76.enchant.EnchantPlugin
 api-version: '1.20'
 libraries:
   - io.github.monun:invfx-core:3.3.2
