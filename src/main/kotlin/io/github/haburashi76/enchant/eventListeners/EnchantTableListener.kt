@@ -1,5 +1,6 @@
 package io.github.haburashi76.enchant.eventListeners
 
+import io.github.haburashi76.enchant.Setup
 import io.github.haburashi76.enchant.item.canEnchanting
 import io.github.haburashi76.enchant.item.magic_stone_item
 import io.github.haburashi76.enchant.item.plusLevel
@@ -7,9 +8,6 @@ import io.github.monun.invfx.InvFX
 import io.github.monun.invfx.openFrame
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.Bukkit
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.Player
@@ -18,8 +16,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.InventoryType
-import org.bukkit.inventory.ShapelessRecipe
-import org.bukkit.inventory.recipe.CraftingBookCategory
 import org.bukkit.plugin.java.JavaPlugin
 import kotlin.random.Random
 
@@ -27,16 +23,9 @@ class EnchantTableListener(
     private val plugin: JavaPlugin,
 ) : Listener, Setup {
 
-    private val recipe = ShapelessRecipe(NamespacedKey.minecraft("magic_stone"), magic_stone_item).apply {
-        addIngredient(1, Material.LAPIS_LAZULI)
-        addIngredient(1, Material.AMETHYST_SHARD)
-        category = CraftingBookCategory.EQUIPMENT
-    }
 
     override fun setup() {
-
         plugin.server.pluginManager.registerEvents(this, plugin)
-        Bukkit.addRecipe(recipe)
     }
 
     @EventHandler

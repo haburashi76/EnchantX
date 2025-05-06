@@ -1,5 +1,6 @@
 package io.github.haburashi76.enchant.eventListeners
 
+import io.github.haburashi76.enchant.Setup
 import io.github.haburashi76.enchant.item.isArmor
 import io.github.haburashi76.enchant.item.isNetherite
 import io.github.haburashi76.enchant.item.isWeapon

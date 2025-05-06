@@ -1,5 +1,6 @@
 package io.github.haburashi76.enchant.eventListeners
 
+import io.github.haburashi76.enchant.Setup
 import io.github.haburashi76.enchant.item.*
 import io.github.haburashi76.enchant.keys.plusLevelKey
 import io.github.haburashi76.enchant.maps.*
@@ -7,9 +8,7 @@ import io.github.monun.invfx.InvFX
 import io.github.monun.invfx.openFrame
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import org.bukkit.Bukkit
 import org.bukkit.Material
-import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.Player
@@ -19,8 +18,6 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.ShapedRecipe
-import org.bukkit.inventory.recipe.CraftingBookCategory
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
 import kotlin.random.Random
@@ -29,17 +26,7 @@ class AnvilListener(
     private val plugin: JavaPlugin,
 ) : Listener, Setup {
 
-
-    private val recipe = ShapedRecipe(NamespacedKey.minecraft("star_heart"), heart_item).apply {
-        shape("@@@", "@#@", "@@@")
-        setIngredient('@', magic_stone_item)
-        setIngredient('#', Material.POPPED_CHORUS_FRUIT)
-        category = CraftingBookCategory.EQUIPMENT
-    }
-
-
     override fun setup() {
-        Bukkit.addRecipe(recipe)
         plugin.server.pluginManager.registerEvents(this, plugin)
     }
 

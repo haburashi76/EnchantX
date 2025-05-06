@@ -1,5 +1,6 @@
 package io.github.haburashi76.enchant.eventListeners
 
+import io.github.haburashi76.enchant.Setup
 import io.github.haburashi76.enchant.item.*
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
