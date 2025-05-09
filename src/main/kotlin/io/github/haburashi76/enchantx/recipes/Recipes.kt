@@ -1,8 +1,8 @@
-package io.github.haburashi76.enchant.recipes
+package io.github.haburashi76.enchantx.recipes
 
-import io.github.haburashi76.enchant.Setup
-import io.github.haburashi76.enchant.item.heart_item
-import io.github.haburashi76.enchant.item.magic_stone_item
+import io.github.haburashi76.enchantx.Setup
+import io.github.haburashi76.enchantx.item.heart_item
+import io.github.haburashi76.enchantx.item.magic_stone_item
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey

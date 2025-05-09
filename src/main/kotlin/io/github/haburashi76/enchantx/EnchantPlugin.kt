@@ -1,7 +1,7 @@
-package io.github.haburashi76.enchant
+package io.github.haburashi76.enchantx
 
-import io.github.haburashi76.enchant.eventListeners.*
-import io.github.haburashi76.enchant.recipes.Recipes
+import io.github.haburashi76.enchantx.eventListeners.*
+import io.github.haburashi76.enchantx.recipes.Recipes
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
 

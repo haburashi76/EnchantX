@@ -1,9 +1,9 @@
-package io.github.haburashi76.enchant.eventListeners
+package io.github.haburashi76.enchantx.eventListeners
 
-import io.github.haburashi76.enchant.Setup
-import io.github.haburashi76.enchant.item.*
-import io.github.haburashi76.enchant.keys.plusLevelKey
-import io.github.haburashi76.enchant.maps.*
+import io.github.haburashi76.enchantx.Setup
+import io.github.haburashi76.enchantx.item.*
+import io.github.haburashi76.enchantx.keys.plusLevelKey
+import io.github.haburashi76.enchantx.maps.*
 import io.github.monun.invfx.InvFX
 import io.github.monun.invfx.openFrame
 import net.kyori.adventure.text.Component
@@ -15,8 +15,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.ClickType
-import org.bukkit.event.inventory.InventoryOpenEvent
-import org.bukkit.event.inventory.InventoryType
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
@@ -31,12 +30,10 @@ class AnvilListener(
     }
 
     @EventHandler
-    fun onInventoryOpen(event: InventoryOpenEvent) {
-        if (event.inventory.type == InventoryType.ANVIL) {
-            if (event.player.getCooldown(Material.PETRIFIED_OAK_SLAB) == 0) {
-                event.isCancelled = true
-                anvilSelectInterface(event.player)
-            }
+    fun onClick(event: PlayerInteractEvent) {
+        if (event.clickedBlock?.type == Material.ANVIL && !event.player.isSneaking) {
+            event.isCancelled = true
+            anvilSelectInterface(event.player)
         }
     }
     private fun anvilSelectInterface(player: HumanEntity) {
@@ -49,7 +46,6 @@ class AnvilListener(
                 }
                 onClick { event ->
                     if (event.click == ClickType.LEFT) {
-                        event.whoClicked.setCooldown(Material.PETRIFIED_OAK_SLAB, 5)
                         event.whoClicked.closeInventory()
                         event.whoClicked.openAnvil(null, true)
                     }

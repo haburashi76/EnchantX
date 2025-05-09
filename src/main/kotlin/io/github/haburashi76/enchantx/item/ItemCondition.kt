@@ -1,4 +1,4 @@
-package io.github.haburashi76.enchant.item
+package io.github.haburashi76.enchantx.item
 
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment

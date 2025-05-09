@@ -1,4 +1,4 @@
-package io.github.haburashi76.enchant.keys
+package io.github.haburashi76.enchantx.keys
 
 import org.bukkit.NamespacedKey
 

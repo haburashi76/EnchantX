@@ -1,6 +1,6 @@
-package io.github.haburashi76.enchant.item
+package io.github.haburashi76.enchantx.item
 
-import io.github.haburashi76.enchant.keys.plusLevelKey
+import io.github.haburashi76.enchantx.keys.plusLevelKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 

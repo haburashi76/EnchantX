@@ -1,7 +1,7 @@
-package io.github.haburashi76.enchant.item
+package io.github.haburashi76.enchantx.item
 
-import io.github.haburashi76.enchant.keys.magic_ston_key
-import io.github.haburashi76.enchant.keys.starHeartKey
+import io.github.haburashi76.enchantx.keys.magic_ston_key
+import io.github.haburashi76.enchantx.keys.starHeartKey
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment

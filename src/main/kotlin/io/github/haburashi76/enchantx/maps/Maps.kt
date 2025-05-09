@@ -1,4 +1,4 @@
-package io.github.haburashi76.enchant.maps
+package io.github.haburashi76.enchantx.maps
 
 val weaponDamageMap =
     listOf(0.0, 0.02, 0.04, 0.08, 0.15, 0.3, 0.45, 0.5, 0.6, 0.75, 0.95)

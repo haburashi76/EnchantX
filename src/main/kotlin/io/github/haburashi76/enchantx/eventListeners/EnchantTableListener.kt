@@ -1,9 +1,9 @@
-package io.github.haburashi76.enchant.eventListeners
+package io.github.haburashi76.enchantx.eventListeners
 
-import io.github.haburashi76.enchant.Setup
-import io.github.haburashi76.enchant.item.canEnchanting
-import io.github.haburashi76.enchant.item.magic_stone_item
-import io.github.haburashi76.enchant.item.plusLevel
+import io.github.haburashi76.enchantx.Setup
+import io.github.haburashi76.enchantx.item.canEnchanting
+import io.github.haburashi76.enchantx.item.magic_stone_item
+import io.github.haburashi76.enchantx.item.plusLevel
 import io.github.monun.invfx.InvFX
 import io.github.monun.invfx.openFrame
 import net.kyori.adventure.text.Component
@@ -22,7 +22,6 @@ import kotlin.random.Random
 class EnchantTableListener(
     private val plugin: JavaPlugin,
 ) : Listener, Setup {
-
 
     override fun setup() {
         plugin.server.pluginManager.registerEvents(this, plugin)
