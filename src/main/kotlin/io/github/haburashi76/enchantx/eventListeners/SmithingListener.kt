@@ -14,6 +14,7 @@ import org.bukkit.entity.HumanEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.PrepareSmithingEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -55,7 +56,7 @@ class SmithingListener(
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
-        if (event.clickedBlock?.type == Material.SMITHING_TABLE && !event.player.isSneaking) {
+        if (event.clickedBlock?.type == Material.SMITHING_TABLE && !event.player.isSneaking && event.action == Action.RIGHT_CLICK_BLOCK) {
             event.isCancelled = true
             smithingSelectInterface(event.player)
         }
