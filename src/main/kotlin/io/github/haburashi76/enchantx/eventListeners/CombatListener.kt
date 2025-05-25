@@ -29,6 +29,21 @@ class CombatListener(private val plugin: JavaPlugin): Listener, Setup {
     }
     @EventHandler
     fun onDamage(event: EntityDamageEvent) {
+        val entity = event.entity
+        if (entity is Player) {
+            entity.inventory.armorContents.forEach {
+                if (it != null) {
+                    if (it.plusLevel > 0 && it.type.isArmor()) {
+                        event.damage *= 1.0 -
+                                if (it.type.isNetherite()) netheriteArmorBlockMap[it.plusLevel] else armorBlockMap[it.plusLevel]
+                    }
+                }
+            }
+        }
+
+    }
+    @EventHandler
+    fun onDamageByEntity(event: EntityDamageByEntityEvent) {
         val damager = event.entity
         if (damager is Player) {
             if (damager.inventory.itemInMainHand.plusLevel > 0) {
@@ -40,20 +55,6 @@ class CombatListener(private val plugin: JavaPlugin): Listener, Setup {
                     event.damage *= (1.0 +
                             if (damager.inventory.itemInMainHand.type.isNetherite())
                                 netheriteOtherDamageMap[damager.inventory.itemInMainHand.plusLevel] else otherDamageMap[damager.inventory.itemInMainHand.plusLevel])
-                }
-            }
-        }
-    }
-    @EventHandler
-    fun onDamageByEntity(event: EntityDamageByEntityEvent) {
-        val entity = event.entity
-        if (entity is Player) {
-            entity.inventory.armorContents.forEach {
-                if (it != null) {
-                    if (it.plusLevel > 0 && it.type.isArmor()) {
-                        event.damage *= 1.0 -
-                                if (it.type.isNetherite()) netheriteArmorBlockMap[it.plusLevel] else armorBlockMap[it.plusLevel]
-                    }
                 }
             }
         }
