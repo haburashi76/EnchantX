@@ -9,6 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
@@ -27,9 +28,8 @@ class CombatListener(private val plugin: JavaPlugin): Listener, Setup {
         }
     }
     @EventHandler
-    fun onDamage(event: EntityDamageByEntityEvent) {
-        val damager = event.damager
-        val entity = event.entity
+    fun onDamage(event: EntityDamageEvent) {
+        val damager = event.entity
         if (damager is Player) {
             if (damager.inventory.itemInMainHand.plusLevel > 0) {
                 if (damager.inventory.itemInMainHand.type.isWeapon()) {
@@ -43,6 +43,10 @@ class CombatListener(private val plugin: JavaPlugin): Listener, Setup {
                 }
             }
         }
+    }
+    @EventHandler
+    fun onDamageByEntity(event: EntityDamageByEntityEvent) {
+        val entity = event.entity
         if (entity is Player) {
             entity.inventory.armorContents.forEach {
                 if (it != null) {
