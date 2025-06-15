@@ -3,7 +3,8 @@ package io.github.haburashi76.enchantx.eventListeners
 import io.github.haburashi76.enchantx.Setup
 import io.github.haburashi76.enchantx.item.*
 import io.github.haburashi76.enchantx.keys.plusLevelKey
-import io.github.haburashi76.enchantx.maps.*
+import io.github.haburashi76.enchantx.maps.probMap
+import io.github.haburashi76.enchantx.maps.starMap
 import io.github.monun.invfx.InvFX
 import io.github.monun.invfx.openFrame
 import net.kyori.adventure.text.Component
@@ -34,10 +35,10 @@ class AnvilListener(
     fun onClick(event: PlayerInteractEvent) {
         if (event.clickedBlock?.type == Material.ANVIL && !event.player.isSneaking && event.action == Action.RIGHT_CLICK_BLOCK) {
             event.isCancelled = true
-            anvilSelectInterface(event.player)
+            selectInterface(event.player)
         }
     }
-    private fun anvilSelectInterface(player: HumanEntity) {
+    private fun selectInterface(player: HumanEntity) {
         val frame = InvFX.frame(1, Component.text("제련 방법 선택")) {
             slot(2, 0) {
                 item = ItemStack(Material.ANVIL).apply {
@@ -93,7 +94,7 @@ class AnvilListener(
                             currentItemSlot = -10000
                             item = null
                         } else {
-                            if (item?.plusLevel!! < 10) {
+                            if (item != null && item!!.plusLevel < 10 && item!!.potentials.isEmpty()) {
                                 if (shardSlot.item!!.amount > 1) {
                                     shardSlot.item!!.amount = shardSlot.item!!.amount - 1
                                 } else {
@@ -119,18 +120,7 @@ class AnvilListener(
                                     event.whoClicked.inventory.setItem(
                                         currentItemSlot,
                                         event.currentItem!!.clone().apply {
-                                            lore(listOf(Component.text(""),
-                                                Component.text(starMap[this.plusLevel]),
-                                                Component.text(
-                                                    if (event.currentItem?.type?.isWeapon() == true)
-                                                        "(주로 사용하는 손에서)최종 피해량 ${1.0 +
-                                                                if (this.type.isNetherite()) netheriteWeaponDamageMap[this.plusLevel] else weaponDamageMap[this.plusLevel]}배"
-                                                    else if (event.currentItem?.type?.isArmor() == true)
-                                                        "받는 피해 ${1.0 -
-                                                                if (this.type.isNetherite()) netheriteArmorBlockMap[this.plusLevel] else armorBlockMap[this.plusLevel]}배"
-                                                    else "(주로 사용하는 손에서)최종 피해량 ${1.0 +
-                                                            if (this.type.isNetherite()) netheriteOtherDamageMap[this.plusLevel] else otherDamageMap[this.plusLevel]}배"
-                                                )))
+                                            loreSet()
                                         })
                                 } else {
                                     (event.whoClicked as Player).playSound(

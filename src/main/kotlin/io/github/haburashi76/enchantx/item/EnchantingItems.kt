@@ -1,5 +1,6 @@
 package io.github.haburashi76.enchantx.item
 
+import io.github.haburashi76.enchantx.keys.bookKey
 import io.github.haburashi76.enchantx.keys.magic_ston_key
 import io.github.haburashi76.enchantx.keys.starHeartKey
 import net.kyori.adventure.text.Component
@@ -23,5 +24,13 @@ val magic_stone_item = ItemStack(Material.ECHO_SHARD).apply {
     itemMeta = itemMeta?.apply {
         displayName(Component.text("마석"))
         persistentDataContainer.set(magic_ston_key, PersistentDataType.BOOLEAN, true)
+    }
+}
+val book_item = ItemStack(Material.KNOWLEDGE_BOOK).apply {
+    addUnsafeEnchantment(Enchantment.LUCK, 1)
+    addItemFlags(ItemFlag.HIDE_ENCHANTS)
+    itemMeta = itemMeta?.apply {
+        displayName(Component.text("주문의 서"))
+        persistentDataContainer.set(bookKey, PersistentDataType.BOOLEAN, true)
     }
 }

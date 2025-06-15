@@ -27,7 +27,9 @@ class CraftingListener(private val plugin: JavaPlugin) : Listener, Setup {
                 }
             }
             if (meta == heart_item.itemMeta) {
-                event.inventory.result = null
+                if (event.inventory.result?.itemMeta != book_item.itemMeta) {
+                    event.inventory.result = null
+                }
             }
         }
     }

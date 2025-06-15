@@ -1,8 +1,9 @@
 package io.github.haburashi76.enchantx.eventListeners
 
 import io.github.haburashi76.enchantx.Setup
-import io.github.haburashi76.enchantx.item.*
-import io.github.haburashi76.enchantx.maps.*
+import io.github.haburashi76.enchantx.item.canEnchanting
+import io.github.haburashi76.enchantx.item.loreSet
+import io.github.haburashi76.enchantx.item.plusLevel
 import io.github.monun.invfx.InvFX
 import io.github.monun.invfx.openFrame
 import net.kyori.adventure.text.Component
@@ -58,10 +59,10 @@ class SmithingListener(
     fun onClick(event: PlayerInteractEvent) {
         if (event.clickedBlock?.type == Material.SMITHING_TABLE && !event.player.isSneaking && event.action == Action.RIGHT_CLICK_BLOCK) {
             event.isCancelled = true
-            smithingSelectInterface(event.player)
+            selectInterface(event.player)
         }
     }
-    private fun smithingSelectInterface(player: HumanEntity) {
+    private fun selectInterface(player: HumanEntity) {
         val frame = InvFX.frame(1, Component.text("제련 방법 선택")) {
             slot(2, 0) {
                 item = ItemStack(Material.SMITHING_TABLE).apply {
@@ -209,28 +210,7 @@ class SmithingListener(
         ) {
             event.result = event.result?.clone()?.apply {
                 if (plusLevel > 0) {
-                    lore(
-                        listOf(
-                            Component.text(""),
-                            Component.text(starMap[this.plusLevel]),
-                            Component.text(
-                                if (event.result?.type?.isWeapon() == true)
-                                    "(주로 사용하는 손에서)최종 피해량 ${
-                                        1.0 +
-                                                if (this.type.isNetherite()) netheriteWeaponDamageMap[this.plusLevel] else weaponDamageMap[this.plusLevel]
-                                    }배"
-                                else if (event.result?.type?.isArmor() == true)
-                                    "받는 피해 ${
-                                        1.0 -
-                                                if (this.type.isNetherite()) netheriteArmorBlockMap[this.plusLevel] else armorBlockMap[this.plusLevel]
-                                    }배"
-                                else "(주로 사용하는 손에서)최종 피해량 ${
-                                    1.0 +
-                                            if (this.type.isNetherite()) netheriteOtherDamageMap[this.plusLevel] else otherDamageMap[this.plusLevel]
-                                }배"
-                            )
-                        )
-                    )
+                    loreSet()
                 }
             }
         }
